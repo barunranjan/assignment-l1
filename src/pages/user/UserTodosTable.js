@@ -9,7 +9,7 @@ const UserTodosTable = ({ userTodos }) => {
           <thead className="thead-dark">
             <tr>
               <th>UserId</th>
-              <th>Title</th>
+              <th>Todos</th>
               <th>Completed</th>
             </tr>
           </thead>
