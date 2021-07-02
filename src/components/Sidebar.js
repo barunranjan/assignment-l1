@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import * as FaIcons from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import * as RiIcons from "react-icons/ri";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import UserContext from "../context/userContext/userContext";
 import SubMenu from "./SubMenu";
 
 const Nav = styled.div`
@@ -43,15 +44,8 @@ const SidebarWrap = styled.div`
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(false);
-  const [sidebarUser, setSideBarUser] = useState([]);
-
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => setSideBarUser(json));
-  }, []);
-
-  console.log(sidebarUser);
+  const userContext = useContext(UserContext);
+  const { users } = userContext;
 
   const sideBarList = [
     {
@@ -60,7 +54,7 @@ const Sidebar = () => {
       icon: <AiIcons.AiFillHome />,
       iconClosed: <RiIcons.RiArrowDownSFill />,
       iconOpened: <RiIcons.RiArrowUpSFill />,
-      subNav: sidebarUser,
+      subNav: users,
     },
   ];
   const showSidebar = () => setSidebar(!sidebar);

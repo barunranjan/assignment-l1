@@ -1,49 +1,36 @@
-import React, { Fragment, useEffect, useState } from "react";
-
+import React, { Fragment, useContext, useState } from "react";
 import Pagination from "../../components/Pagination";
-import UsersTable from "./UsersTable";
+import UserContext from "../../context/userContext/userContext";
 import UserFilter from "./userFilter";
+import UsersTable from "./UsersTable";
 
 const User = () => {
+  const userContext = useContext(UserContext);
+  const { users } = userContext;
+  const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [userPerPage] = useState(5);
-  const [users, setUsers] = useState([]);
-  const [allUser, setAllUser] = useState([]);
-
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => {
-        setUsers(json);
-        setAllUser(json);
-      });
-  }, []);
-
   const indexOfLastUser = currentPage * userPerPage;
   const indexOfFirstUser = indexOfLastUser - userPerPage;
   const currentUser = users.slice(indexOfFirstUser, indexOfLastUser);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  console.log(currentUser);
-
   return (
     <Fragment>
-      <UserFilter
-        users={users}
-        setUsers={setUsers}
-        allUser={allUser}
-        setAllUser={setUsers}
-      />
+      {!showForm && <UserFilter />}
       <UsersTable
         key={currentUser.id}
-        users={currentUser}
-        setUsers={setUsers}
+        users={users.length > 5 ? currentUser : users}
+        setShowForm={setShowForm}
+        showForm={showForm}
       />
-      <Pagination
-        userPerPage={userPerPage}
-        totalUser={users.length}
-        paginate={paginate}
-      />
+      {!showForm && (
+        <Pagination
+          userPerPage={userPerPage}
+          totalUser={users.length}
+          paginate={paginate}
+        />
+      )}
     </Fragment>
   );
 };

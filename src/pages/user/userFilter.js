@@ -1,24 +1,19 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
+import UserContext from "../../context/userContext/userContext";
 
-const UserFilter = ({ users, setUsers, allUser, setAllUser }) => {
+const UserFilter = () => {
+  const userContext = useContext(UserContext);
+  const { filterUser, getUser } = userContext;
   const text = useRef("");
 
   const onChange = (e) => {
     if (text.current.value !== "") {
-      const filterUser = users.filter((user) => {
-        const regex = new RegExp(`${e.target.value}`, "gi");
-        return (
-          user.name.match(regex) ||
-          user.email.match(regex) ||
-          user.address.city.match(regex)
-        );
-      });
-      console.log(filterUser);
-      setUsers(filterUser);
+      filterUser(e.target.value);
     } else {
-      setUsers(allUser);
+      getUser();
     }
   };
+
   return (
     <div className="d-flex justify-content-end align-items-center container  mt-2 mb-2 ">
       <div className="row ">

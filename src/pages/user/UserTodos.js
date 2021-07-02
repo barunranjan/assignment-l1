@@ -4,22 +4,29 @@ import UserTodosTable from "./UserTodosTable";
 
 const UserTodos = () => {
   let { id } = useParams();
-  console.log(id);
+
   const [userTodos, setUserTodos] = useState(null);
   const [userTodosData, setUserTodosData] = useState(null);
+  const [todosStatus, setTodoStatus] = useState("");
 
   const getTodos = () => {
     fetch(`https://jsonplaceholder.typicode.com/todos?userId=${id}`)
       .then((response) => response.json())
       .then((json) => {
-        setUserTodos(json);
-        setUserTodosData(json);
+        if (todosStatus === "completed") {
+          setUserTodos(json.filter((todo) => todo.completed));
+        } else if (todosStatus === "notCompleted") {
+          setUserTodos(json.filter((todo) => !todo.completed));
+        } else if (todosStatus === "") {
+          setUserTodos(json);
+          setUserTodosData(json);
+        }
       });
   };
   useEffect(() => {
     getTodos();
     // eslint-disable-next-line
-  }, [id]);
+  }, [id, todosStatus]);
 
   const buttonStyle = {
     display: "flex",
@@ -29,12 +36,14 @@ const UserTodos = () => {
 
   const filterComplete = () => {
     const completed = userTodosData.filter((user) => user.completed);
-    console.log(userTodos);
+    setTodoStatus("completed");
+
     setUserTodos(completed);
   };
   const filterNotComplete = () => {
     const notCompleted = userTodosData.filter((user) => !user.completed);
-    console.log(userTodos);
+
+    setTodoStatus("notCompleted");
     setUserTodos(notCompleted);
   };
   return (
@@ -52,7 +61,13 @@ const UserTodos = () => {
         >
           Not Completed
         </button>
-        <button className="btn btn-primary" onClick={() => getTodos()}>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            setTodoStatus("");
+            getTodos();
+          }}
+        >
           All Todos
         </button>
       </div>

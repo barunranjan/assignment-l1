@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import UserContext from "../../../context/userContext/userContext";
 
-const RegistrationForm = ({ current }) => {
+const UserEditPage = ({ current, setShowForm }) => {
+  const userContext = useContext(UserContext);
+  const { updateUser } = userContext;
   useEffect(() => {
     if (current != null) {
       setUser(current);
@@ -16,20 +19,34 @@ const RegistrationForm = ({ current }) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    city: "",
+    address: {
+      city: "",
+    },
   });
 
-  const { name, email, city } = user;
+  const { name, email, address } = user;
+  const { city } = address;
 
-  const onChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const onChangeName = (e) => {
+    setUser({ ...user, name: e.target.value });
+  };
+  const onChangeEmail = (e) => {
+    setUser({ ...user, email: e.target.value });
+  };
+
+  const onChangeCity = (e) => {
+    setUser({
+      ...user,
+      address: {
+        city: e.target.value,
+      },
+    });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    alert(JSON.stringify(user));
-    // }
-    console.log(user);
+    updateUser(user);
+    setShowForm(false);
   };
 
   return (
@@ -37,7 +54,7 @@ const RegistrationForm = ({ current }) => {
       <div className="row ">
         <form onSubmit={onSubmit}>
           <div className="form-group">
-            <label for="inputUserName" className="control-label">
+            <label htmlFor="inputUserName" className="control-label">
               Name
             </label>
             <input
@@ -45,11 +62,11 @@ const RegistrationForm = ({ current }) => {
               className="form-control"
               name="name"
               value={name}
-              onChange={onChange}
+              onChange={onChangeName}
             />
           </div>
           <div className="form-group">
-            <label for="inputPassword" className="control-label">
+            <label htmlFor="inputPassword" className="control-label">
               Email
             </label>
             <input
@@ -57,11 +74,11 @@ const RegistrationForm = ({ current }) => {
               className="form-control"
               name="email"
               value={email}
-              onChange={onChange}
+              onChange={onChangeEmail}
             />
           </div>
           <div className="form-group">
-            <label for="city" className="control-label">
+            <label htmlFor="city" className="control-label">
               City
             </label>
             <input
@@ -69,7 +86,7 @@ const RegistrationForm = ({ current }) => {
               className="form-control"
               name="city"
               value={city}
-              onChange={onChange}
+              onChange={onChangeCity}
             />
           </div>
           <div>
@@ -81,4 +98,4 @@ const RegistrationForm = ({ current }) => {
   );
 };
 
-export default RegistrationForm;
+export default UserEditPage;

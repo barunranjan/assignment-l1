@@ -44,7 +44,6 @@ const SubMenu = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
 
   const showSubnav = () => setSubnav(!subnav);
-  console.log(item);
 
   return (
     <>
