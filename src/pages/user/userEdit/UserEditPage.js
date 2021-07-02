@@ -91,6 +91,12 @@ const UserEditPage = ({ current, setShowForm }) => {
           </div>
           <div>
             <input type="submit" className="btn btn-primary btn-block" />
+            <button
+              className="btn btn-secondary btn-block"
+              onClick={() => setShowForm(false)}
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>

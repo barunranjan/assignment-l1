@@ -18,6 +18,7 @@ const User = () => {
   return (
     <Fragment>
       {!showForm && <UserFilter />}
+
       <UsersTable
         key={currentUser.id}
         users={users.length > 5 ? currentUser : users}
